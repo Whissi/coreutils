@@ -34,6 +34,7 @@ skip_if_root_
 # Before fileutils-4.1, we'd get the following misleading
 # diagnostic instead of '...: Permission denied'.
 # touch: creating '/': Is a directory
+env SANDBOX_WRITE=${SANDBOX_WRITE}:/ \
 touch / > out 2>&1 && fail=1
 
 # On SunOS4, EPERM is 'Not owner'.

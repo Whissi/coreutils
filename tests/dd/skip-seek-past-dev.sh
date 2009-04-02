@@ -49,6 +49,7 @@ echo "dd: 'standard input': cannot skip: Invalid argument
 0+0 records out" > err_ok || framework_failure_
 compare err_ok err || fail=1
 
+env SANDBOX_WRITE=${SANDBOX_WRITE}:$device \
 timeout 10 dd bs=1 seek=$DEV_OFLOW count=0 status=noxfer > "$device" 2> err
 test "$?" = "1" || fail=1
 echo "dd: 'standard output': cannot seek: Invalid argument
