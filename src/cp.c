@@ -477,9 +477,15 @@ make_dir_parents_private (char const *const_dir, size_t src_offset,
               mkdir_mode &= CHMOD_MODE_BITS & ~omitted_permissions;
               if (mkdir (dir, mkdir_mode) != 0)
                 {
-                  error (0, errno, _("cannot make directory %s"),
-                         quoteaf (dir));
-                  return false;
+                  /* If someone else created it between our stat/mkdir,
+                     don't complain.  It's debatable whether we should
+                     also preserve the mode bits in this scenario.  */
+                  if (errno != EEXIST)
+                    {
+                      error (0, errno, _("cannot make directory %s"),
+                             quoteaf (dir));
+                      return false;
+                    }
                 }
               else
                 {
